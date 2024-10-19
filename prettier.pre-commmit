@@ -1,0 +1,27 @@
+#!/usr/bin/sh
+#
+# Fails if nothing is staged, otherwise reformats staged files, and prompts to
+# review changes.
+
+set -e
+
+trap 'test $? -gt 0 && echo "Aborting..."' EXIT
+
+staged_files=$(git diff --name-only --cached)
+
+if test -z "$staged_files"
+then
+	echo 'Nothing staged.'
+	exit 1
+fi
+
+if ! prettier --check $staged_files >/dev/null
+then
+	prettier --write $staged_files
+
+	echo 'Files have been reformatted...'
+	echo 'Please review unstaged changes before adding and committing.'
+	exit 1
+fi
+
+exit 0
