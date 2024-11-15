@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Check if any staged .py files need formatting.  If so, format and prompt to
+# stage new changes.
+
+format_pyfiles ()
+{
+	for f in "$@"
+	do
+		shift
+		case "$f" in
+		*.py)
+			test -e "$f" && set -- "$@" "$f"
+		esac
+	done
+
+	if test $# -eq 0
+	then
+		# No python files being committed, so return success.
+		return 0
+	fi
+
+	if ! black --check "$@" >/dev/null 2>&1
+	then
+		black "$@"
+		echo 'Please review changes and re-stage'
+		return 1
+	fi
+
+	return 0
+}
+
+staged_files=$(git diff --staged --name-only)
+
+format_pyfiles $staged_files
+
+exit $?
