@@ -22,8 +22,10 @@ format_pyfiles ()
 
 	if ! black --check "$@" >/dev/null 2>&1
 	then
+		diff=$(black --diff --color --quiet "$@")
 		black "$@"
-		echo 'Please review changes and re-stage'
+		printf '\n%s\n' "$diff"
+		printf '\n\033[1m%s\033[m\n' 'Please review changes and re-stage'
 		return 1
 	fi
 
