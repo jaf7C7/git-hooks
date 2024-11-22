@@ -1,9 +1,7 @@
-#!/bin/sh
-#
-# Check if any staged .py files need formatting.  If so, format and prompt to
-# stage new changes.
+# Reformats any staged python files with `black`, and prompts to review
+# changes.
 
-format_pyfiles ()
+format ()
 {
 	for f in "$@"
 	do
@@ -16,7 +14,7 @@ format_pyfiles ()
 
 	if test $# -eq 0
 	then
-		# No python files being committed, so return success.
+		# No python files being committed, so do nothing.
 		return 0
 	fi
 
@@ -24,8 +22,9 @@ format_pyfiles ()
 	then
 		diff=$(black --diff --color --quiet "$@")
 		black "$@"
-		printf '\n%s\n' "$diff"
-		printf '\n\033[1m%s\033[m\n' 'Please review changes and re-stage'
+		printf '\n%s\n\n\033[1m%s\033[m\n' \
+			"$diff" \
+			'Please review changes and re-stage'
 		return 1
 	fi
 
@@ -34,6 +33,4 @@ format_pyfiles ()
 
 staged_files=$(git diff --staged --name-only)
 
-format_pyfiles $staged_files
-
-exit $?
+format $staged_files
