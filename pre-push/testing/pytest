@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Runs `pytest` and aborts push if a test fails.
+
+exec pytest --quiet --exitfirst --no-cov
