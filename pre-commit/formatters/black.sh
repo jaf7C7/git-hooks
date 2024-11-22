@@ -27,8 +27,6 @@ format ()
 			'Please review changes and re-stage'
 		return 1
 	fi
-
-	return 0
 }
 
 staged_files=$(git diff --staged --name-only)
