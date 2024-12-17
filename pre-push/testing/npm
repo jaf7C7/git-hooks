@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# Runs `npm test` and doesn't push if a test fails.
+
+
+# Add `test-quickfail` to `scripts` in `package.json` with appropriate option
+# from your testing framework.  E.g. for mocha:
+#
+#   `"test-quickfail": "mocha --bail"`
+#
+exec npm test-quickfail
