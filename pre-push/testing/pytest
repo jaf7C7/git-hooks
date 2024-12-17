@@ -2,4 +2,10 @@
 #
 # Runs `pytest` and aborts push if a test fails.
 
-exec pytest --quiet --exitfirst --no-cov
+set -e
+
+echo 'Testing...'
+
+pytest --quiet --exitfirst --no-cov
+
+echo 'Pushing...'
